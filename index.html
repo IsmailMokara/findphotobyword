@@ -129,6 +129,38 @@ h1 {
 .incorrect {
     color: #e74c3c;
 }
+
+/* মোবাইলের জন্য স্ক্রীন অ্যাডজাস্ট */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .clock-container {
+        width: 100%;
+        height: 300px; /* মোবাইলের জন্য কম উচ্চতা */
+    }
+
+    .images-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .image-item {
+        width: 50px; /* মোবাইলের জন্য ছবির আকার ছোট করা */
+        height: 50px;
+        font-size: 12px; /* মোবাইলে পাঠ্যের আকার ছোট করা */
+    }
+
+    #check-btn {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+
+
 </style>
 </head>
 <body>
@@ -303,6 +335,38 @@ checkBtn.addEventListener('click', () => {
 window.addEventListener('load', () => {
     initClock();
 });
+
+
+// মোবাইল ডিভাইসের জন্য টাচ ইভেন্ট
+hand.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    e.preventDefault();
+});
+
+document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+
+    const rect = imagesContainer.getBoundingClientRect();
+    const mx = e.touches[0].clientX - rect.left;
+    const my = e.touches[0].clientY - rect.top;
+    const dx = mx - centerX;
+    const dy = my - centerY;
+
+    let angle = Math.atan2(dx, -dy) * (180 / Math.PI);
+    if (angle < 0) angle += 360;
+
+    currentAngle = angle;
+    hand.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+});
+
+document.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+
+
+
+
 </script>
 </body>
 </html>
